@@ -1,6 +1,6 @@
 #!/bin/bash
 #====================================================
-#	SCRIPT: CONEXAO DARKSSH MANAGER
+#	SCRIPT: CONEXAO SSHPLUS MANAGER
 #	DESENVOLVIDO POR:	CRAZY_VPN
 #	DATA ATUALIZACAO:	28-04-2021 
 #	CONTATO TELEGRAM:	http://t.me/crazy_vpn
@@ -17,7 +17,7 @@
 		comando[1]="$2"
 		(
 			[[ -e $HOME/fim ]] && rm $HOME/fim
-			[[ ! -d /etc/SSHPlus ]] && rm -rf /bin/menu
+			[[ ! -d /etc/DARKssh ]] && rm -rf /bin/menu
 			${comando[0]} >/dev/null 2>&1
 			${comando[1]} >/dev/null 2>&1
 			touch $HOME/fim
@@ -575,7 +575,7 @@
 					#cat cert.pem key.pem >>/etc/stunnel/stunnel.pem
 					#rm key.pem cert.pem >/dev/null 2>&1
 					sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
-					cd /etc/stunnel && wget sshplus.xyz/script/stunnel.pem && cd $HOME
+					cd /etc/stunnel && wget darkssh.xyz/script/stunnel.pem && cd $HOME
 				}
 				fun_bar 'ssl_certif'
 				echo -e "\n\033[1;32mSTARTING SSL TUNNEL!\033[0m"
@@ -1081,7 +1081,7 @@
 			fun_dep() {
 				wget -O ~/EasyRSA-3.0.1.tgz "https://github.com/OpenVPN/easy-rsa/releases/download/3.0.1/EasyRSA-3.0.1.tgz"
 				[[ ! -e $HOME/EasyRSA-3.0.1.tgz ]] && {
-					wget -O ~/EasyRSA-3.0.1.tgz "http://sshplus.xyz/script/EasyRSA-3.0.1.tgz"
+					wget -O ~/EasyRSA-3.0.1.tgz "http://darkssh.xyz/script/EasyRSA-3.0.1.tgz"
 				}
 				tar xzf ~/EasyRSA-3.0.1.tgz -C ~/
 				mv ~/EasyRSA-3.0.1/ /etc/openvpn/
@@ -1328,12 +1328,12 @@ exit 0' >$RCLOCAL
 				verif_ptrs $porta
 				fun_inisocks() {
 					sleep 1
-					screen -dmS proxy python /etc/SSHPlus/proxy.py $porta
+					screen -dmS proxy python /etc/DARKssh/proxy.py $porta
 					[[ $(grep -wc "proxy.py" /etc/autostart) = '0' ]] && {
-						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'proxy' -X quit;  screen -dmS proxy python /etc/SSHPlus/proxy.py $porta; }" >>/etc/autostart
+						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'proxy' -X quit;  screen -dmS proxy python /etc/DARKssh/proxy.py $porta; }" >>/etc/autostart
 					} || {
 						sed -i '/proxy.py/d' /etc/autostart
-						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'proxy' -X quit;  screen -dmS proxy python /etc/SSHPlus/proxy.py $porta; }" >>/etc/autostart
+						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'proxy' -X quit;  screen -dmS proxy python /etc/DARKssh/proxy.py $porta; }" >>/etc/autostart
 					}
 				}
 				echo ""
@@ -1383,17 +1383,17 @@ exit 0' >$RCLOCAL
 				verif_ptrs $porta
 				fun_inisocksop() {
 					[[ "$(netstat -tlpn | grep 'openvpn' | wc -l)" != '0' ]] && {
-						listoldop=$(grep -w 'DEFAULT_HOST =' /etc/SSHPlus/open.py | cut -d"'" -f2 | cut -d: -f2)
+						listoldop=$(grep -w 'DEFAULT_HOST =' /etc/DARKssh/open.py | cut -d"'" -f2 | cut -d: -f2)
 						listopen=$(netstat -tlpn | grep -w openvpn | grep -v 127.0.0.1 | awk {'print $4'} | cut -d: -f2)
-						sed -i "s/$listoldop/$listopen/" /etc/SSHPlus/open.py
+						sed -i "s/$listoldop/$listopen/" /etc/DARKssh/open.py
 					}
 					sleep 1
-					screen -dmS openpy python /etc/SSHPlus/open.py $porta
+					screen -dmS openpy python /etc/DARKssh/open.py $porta
 					[[ $(grep -wc "open.py" /etc/autostart) = '0' ]] && {
-						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'openpy' -X quit;  screen -dmS openpy python /etc/SSHPlus/open.py $porta; }" >>/etc/autostart
+						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'openpy' -X quit;  screen -dmS openpy python /etc/DARKssh/open.py $porta; }" >>/etc/autostart
 					} || {
 						sed -i '/open.py/d' /etc/autostart
-						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'openpy' -X quit;  screen -dmS openpy python /etc/SSHPlus/open.py $porta; }" >>/etc/autostart
+						echo -e "netstat -tlpn | grep -w $porta > /dev/null || {  screen -r -S 'openpy' -X quit;  screen -dmS openpy python /etc/DARKssh/open.py $porta; }" >>/etc/autostart
 					}
 				}
 				echo ""
@@ -1428,7 +1428,7 @@ exit 0' >$RCLOCAL
 				echo ""
 				abrirptsks() {
 					sleep 1
-					screen -dmS proxy python /etc/SSHPlus/proxy.py $porta
+					screen -dmS proxy python /etc/DARKssh/proxy.py $porta
 					sleep 1
 				}
 				fun_bar 'abrirptsks'
@@ -1445,7 +1445,7 @@ exit 0' >$RCLOCAL
 		elif [[ "$resposta" = '4' ]]; then
 			if ps x | grep -w proxy.py | grep -v grep 1>/dev/null 2>/dev/null; then
 				clear
-				msgsocks=$(cat /etc/SSHPlus/proxy.py | grep -E "MSG =" | awk -F = '{print $2}' | cut -d "'" -f 2)
+				msgsocks=$(cat /etc/DARKssh/proxy.py | grep -E "MSG =" | awk -F = '{print $2}' | cut -d "'" -f 2)
 				echo -e "\E[44;1;37m             PROXY SOCKS              \E[0m"
 				echo ""
 				echo -e "\033[1;33mSTATUS: \033[1;32m$msgsocks"
@@ -1500,11 +1500,11 @@ exit 0' >$RCLOCAL
 					cor_sts='null'
 				fi
 				fun_msgsocks() {
-					msgsocks2=$(cat /etc/SSHPlus/proxy.py | grep "MSG =" | awk -F = '{print $2}')
-					sed -i "s/$msgsocks2/ '$msgg'/g" /etc/SSHPlus/proxy.py
+					msgsocks2=$(cat /etc/DARKssh/proxy.py | grep "MSG =" | awk -F = '{print $2}')
+					sed -i "s/$msgsocks2/ '$msgg'/g" /etc/DARKssh/proxy.py
 					sleep 1
-					cor_old=$(grep 'color=' /etc/SSHPlus/proxy.py | cut -d '"' -f2)
-					sed -i "s/\b$cor_old\b/$cor_sts/g" /etc/SSHPlus/proxy.py
+					cor_old=$(grep 'color=' /etc/DARKssh/proxy.py | cut -d '"' -f2)
+					sed -i "s/\b$cor_old\b/$cor_sts/g" /etc/DARKssh/proxy.py
 
 				}
 				echo ""
@@ -1520,7 +1520,7 @@ exit 0' >$RCLOCAL
 						screen -wipe >/dev/null
 						_Ptsks="$(cat /tmp/Pt_sks)"
 						sleep 1
-						screen -dmS proxy python /etc/SSHPlus/proxy.py $_Ptsks
+						screen -dmS proxy python /etc/DARKssh/proxy.py $_Ptsks
 						rm /tmp/Pt_sks
 					fi
 				}
@@ -1676,7 +1676,7 @@ exit 0' >$RCLOCAL
 	x="ok"
 	fun_conexao() {
 		while true $x != "ok"; do
-			[[ ! -e '/home/sshplus' ]] && exit 0
+			[[ ! -e '/home/darkssh' ]] && exit 0
 			clear
 			echo -e "\E[44;1;37m                CONNECTION MODE                 \E[0m\n"
 			echo -e "\033[1;32mSERVICE: \033[1;33mOPENSSH \033[1;32mPORT: \033[1;37m$(grep 'Port' /etc/ssh/sshd_config | cut -d' ' -f2 | grep -v 'no' | xargs)" && sts6="\033[1;32m◉ "
@@ -1719,7 +1719,7 @@ exit 0' >$RCLOCAL
 				sts1="\033[1;31m○ "
 			}
 			[[ "$(ps x | grep 'slow_dns' | grep -v 'grep'|wc -l)" != '0' ]] && {
-			    echo -e "\033[1;32mSERVICE: \033[1;33mSLOWDNS \033[1;32mPORT: \033[1;37m$(sed -n 1p /etc/SSHPlus/dns/autodns | awk '{print $6}' | cut -d':' -f2)"
+			    echo -e "\033[1;32mSERVICE: \033[1;33mSLOWDNS \033[1;32mPORT: \033[1;37m$(sed -n 1p /etc/DARKssh/dns/autodns | awk '{print $6}' | cut -d':' -f2)"
 				sts8="\033[1;32m◉ "
 			} || {
 				sts8="\033[1;31m○ "

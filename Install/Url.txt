@@ -1,7 +1,7 @@
 ________________________
 Localizador de recursos:
 
-https://raw.githubusercontent.com/sbatrow/DARKSSH-MANAGER/master/Plus
+https://raw.githubusercontent.com/sbatrow/DARKSSH-MANAGER/master/Dark
 
 https://raw.githubusercontent.com/sbatrow/DARKSSH-MANAGER/master/Modulos/$_arq
 
